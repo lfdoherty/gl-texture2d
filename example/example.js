@@ -28,17 +28,30 @@ var shader, texture
 
 shell.on("gl-init", function() {
   var gl = shell.gl
+  shell.preventDefaults = false
   
   //Create shader
   shader = createShader(gl)
   shader.attributes.position.location = 0
 
   //Create texture
-  texture = createTexture(gl, baboon.transpose(1,0))
+  const img = baboon
+  texture = createTexture(gl, img.shape[0], img.shape[1])
+  const data = new Uint8Array(img.shape[0]*img.shape[1]*4)
+  let i=0;
+  for(let x=0;x<img.shape[0];++x){
+    for(let y=0;y<img.shape[1];++y){
+      data[i++] = img.get(x,y,0)
+      data[i++] = img.get(x,y,1)
+      data[i++] = img.get(x,y,2)
+      data[i++] = img.get(x,y,3)
+    }
+  }
+  texture.setData(data)
 })
 
 shell.on("gl-render", function() {
-  console.log('foo')
+  ///console.log('foo')
   shader.bind()
   shader.uniforms.texture = texture.bind()
   drawTriangle(shell.gl)
