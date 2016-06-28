@@ -277,6 +277,7 @@ proto.generateMipmap = function() {
 
 /* like setPixels, but for typed arrays */
 proto.setData = function(data, x_off, y_off, width, height, mip_level) {
+    this.bind()
     mip_level = mip_level || 0;
     var gl = this.gl;
     if(x_off == null || y_off == null) {
